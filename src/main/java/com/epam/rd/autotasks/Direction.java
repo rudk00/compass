@@ -9,21 +9,50 @@ public enum Direction {
         this.degrees = degrees;
     }
 
-    private int degrees;
+    private final int degrees;
+
+    public int getDegrees() {
+        return degrees;
+    }
+    private static int toRange(int degrees) {
+        while (degrees < 0) degrees += 360;
+        return degrees % 360;
+    }
 
     public static Direction ofDegrees(int degrees) {
-        throw new UnsupportedOperationException();
+        degrees = toRange(degrees);
+        for (Direction direction : Direction.values()){
+            if (degrees == direction.getDegrees()) return direction;
+        }
+        return null;
     }
 
     public static Direction closestToDegrees(int degrees) {
-        throw new UnsupportedOperationException();
+        degrees = toRange(degrees);
+        if (degrees < 25) return N;
+        else if (degrees < 70) return NE;
+        else if (degrees < 115) return E;
+        else if (degrees < 150) return SE;
+        else if (degrees < 205) return S;
+        else if (degrees < 250) return SW;
+        else if (degrees < 295) return W;
+        else if (degrees < 340) return NW;
+        return N;
     }
 
     public Direction opposite() {
-        throw new UnsupportedOperationException();
+        if (this == N) return S;
+        if (this == NE) return SW;
+        if (this == E) return W;
+        if (this == SE) return NW;
+        if (this == S) return N;
+        if (this == SW) return NE;
+        if (this == W) return E;
+        return SE;
     }
 
     public int differenceDegreesTo(Direction direction) {
-        throw new UnsupportedOperationException();
+        int differences = Math.abs(this.getDegrees() - direction.getDegrees());
+        return Math.min(differences, 360 - differences);
     }
 }
